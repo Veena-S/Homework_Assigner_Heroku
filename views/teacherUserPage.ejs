@@ -1,0 +1,36 @@
+<% if(isFromAdminPage === false) {%> 
+    <%- include('navbar', {displayPage: 'userPage', userName: userName, user: roles}); -%>
+    <div class="row justify-content-center cust-jumbotron cust-border-round m-5">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <p class="h6">
+            
+        </p>
+      </div>
+      <div class="col-sm-2"></div>
+      
+    </div>
+    <div class="row no-gutters position-relative m-4 cust-border-round">
+      <div class="col-sm-2"></div>
+      <div class="card-deck col-sm-8 justify-content-between">
+<%}%>
+
+<div class="card col-sm-5 position-static pt-sm-2 border-0 bg-transparent">
+    <div class="card-body  cust-bg-color cust-border-round">
+      <h5 class="card-title">Schooling</h5>
+      <div class="list-group">
+        <a href="/list-homeworks" class="list-group-item list-group-item-action cust-list-group-item cust-border-round border-0 m-3 py-1">View Homeworks</a>
+        <a href="/newhw" class="list-group-item list-group-item-action cust-list-group-item cust-border-round border-0 m-3 py-1">New Homework</a>
+        <a href="/search-hw" class="list-group-item list-group-item-action cust-list-group-item cust-border-round border-0 m-3 py-1">Search Homework</a>
+      </div>
+    </div>
+    <!-- <div class="card-footer">
+      <small class="text-muted"></small>
+    </div> -->
+  </div>
+
+  <% if(isFromAdminPage === false) {%> 
+    </div>
+    <div class="col-sm-2"></div>
+  </div>
+  <% } %> 

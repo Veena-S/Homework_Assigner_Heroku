@@ -1,0 +1,55 @@
+<html>
+  <%- include('headerIncludes'); -%>
+  <body>
+    <%- include('navbar', {displayPage: 'adminPage', userName: userName, user: roles}); -%>
+    <div class="jumbotron cust-jumbotron justify-content-center mb-3 mr-5 ml-5 p-5 border-bottom border-top">
+      <h5 class="text-center ">Register New User</h5>
+      <a href="/" class="btn btn-sm rounded-0 btn-over-stretched" role="button" data-placement="top">Back</a>
+    </div>
+    <div class="container">
+      <form action="/new-user" method="POST">
+        <!--
+          {userTableColNames,allSubjectsAndGrades,userName: loggedInUserName, 
+            roles:loggedInUserRoles,newUserRoles,}
+        -->
+        <!--Display the items in userTableColNames-->
+        <!--Column description is set as Key, while column names are set as values in the object-->
+        <% Object.keys(userTableColNames).forEach((colDescription, index) => {%>
+        <div class="row form-row form-group">
+          <label for="Property_<%=index%>" class="col-sm-3 col-form-label cust-text-color"
+            ><%= colDescription%>:
+          </label>
+          <div class="col-sm-8">
+            <% if( colDescription == 'Address' ) {%>
+            <textarea
+              type="text"
+              id="Property_<%=index%>"
+              class="form-control cust-border-round"
+              name="<%= userTableColNames[colDescription] %>"
+            ></textarea>
+            <% } else { %>
+            <input
+              type="text"
+              id="Property_<%=index%>"
+              class="form-control cust-border-round"
+              name="<%= userTableColNames[colDescription] %>"
+              required
+            />
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
+        <!--Display Grades Selection Box-->
+        <% if(allSubjectsAndGrades.dataSubjectGrade !== undefined){ %>           
+          <%- include('gradeSelectList', {dataSubjectGrade: allSubjectsAndGrades.dataSubjectGrade, displaySubjectCombo: false, distinctSubjectsList: distinctSubjectsList, existingData: undefined}) -%>          
+        <% } %> 
+
+        <!--Display Role list check box-->
+        <%- include('roleCheckbox', {roles: newUserRoles} ) -%>
+
+        <input type="submit" class="btn btn-dark" value="Submit" />
+      </form>
+    </div>
+    <%- include('footerIncludes'); -%>
+  </body>
+</html>

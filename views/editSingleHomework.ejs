@@ -1,0 +1,87 @@
+<html>
+  <%- include('headerIncludes'); -%>
+  <body>
+    <%- include('navbar', {displayPage: 'userPage', userName: userData[dbConfig.colUserName], roles: [userData[dbConfig.colRole], userData[dbConfig.colAdmin]]}); -%>
+    <div class="jumbotron cust-jumbotron justify-content-center  ml-5 mr-5 border-bottom border-top">
+      <h5 class="text-center">Edit Homework</h5>
+      <a href="/homework/<%=homeworkData[dbConfig.colID]%>" class="btn btn-sm rounded-0 btn-over-stretched" role="button" data-placement="top">Back</a>
+    </div>
+
+    <!--Display all the important info as one liners-->
+    <div class="container  justify-content-center cust-text-color mt-5">
+      <!--for each user there will be a row-->
+        <div class="row no-gutters cust-bg-color position-relative ml-4 cust-border-round">
+          <!--For adding homework details-->
+          <div class="col-sm-8 position-static pt-sm-2 ml-4"> <!--pb-3 pr-sm-5 pt-sm-5 mt-4-->
+
+            <!--
+              homeworkData,
+              allSubjectsAndGrades,
+              distinctSubjectsList,
+              userData: request.userInfo,
+              dbConfig: db_config,
+            -->
+            <form action="/homework/<%=homeworkData[dbConfig.colID]%>/edit?_method=PUT" method="POST" enctype=multipart/form-data>
+              <h6><i><b><%=homeworkData[dbConfig.colTitle]%></b></i></h6>
+
+              <!--Created On-->
+              <% if(homeworkData[dbConfig.colCreatedAt] !== undefined && homeworkData[dbConfig.colCreatedAt] != null && homeworkData[dbConfig.colCreatedAt] !== '' ) {%> 
+                <div class="row form-row form-group ">
+                  <label for="<%= dbConfig.colCreatedAt%>" class="col-3 col-form-label"><%= dbConfig.descCreatedAt%>:</label>
+                  <input  type="text"  id="<%= dbConfig.colCreatedAt%>" class="form-control col-6" name="<%= dbConfig.colCreatedAt%>" value="<%=homeworkData[dbConfig.colCreatedAt].toDateString()%>" readonly />
+                </div>
+              <% } %> 
+
+              <!--Last Updated on-->
+              <% if(homeworkData[dbConfig.colEditedAt] !== undefined) {%> 
+                <% if(homeworkData[dbConfig.colEditedAt] !== undefined && homeworkData[dbConfig.colEditedAt] != null && homeworkData[dbConfig.colEditedAt] !== '' ) {%> 
+                  <div class="row form-row form-group ">
+                      <label for="<%= dbConfig.colEditedAt%>" class="col-form-label col-3"><%= dbConfig.descEditedAt%>:</label>
+                      <input  type="text"  id="<%= dbConfig.colEditedAt%>" class="form-control col-6" name="<%= dbConfig.colEditedAt%>" value="<%=homeworkData[dbConfig.colEditedAt].toDateString()%>" readonly />
+                  </div>
+                <% } %> 
+              <% } %> 
+
+              <!--Display Grades & Subjects Selection Box, with already existing values as selected-->
+              <% if(allSubjectsAndGrades.dataSubjectGrade !== undefined){ %> 
+                <%- include('gradeSelectList', {dataSubjectGrade: allSubjectsAndGrades.dataSubjectGrade, displaySubjectCombo: true, distinctSubjectsList: distinctSubjectsList, existingData: homeworkData}) -%>
+              <% } %> 
+
+              <!--Status-->
+              <%- include('statusList') -%> 
+
+              <!--Title-->
+              <div class="row form-row form-group ">
+                <label for="<%= dbConfig.colTitle%>" class="col-form-label col-3"><%= dbConfig.descTitle%>:</label>
+                <input  type="text"  id="<%= dbConfig.colTitle%>" class="form-control col-6" name="<%= dbConfig.colTitle%>" value="<%=homeworkData[dbConfig.colTitle]%>" />
+              </div>
+
+              <!--Homework Description-->
+              <div class="row form-row form-group ">
+                <label for="<%= dbConfig.colHwrkDesc%>" class="col-form-label col-3"><%= dbConfig.descHwrkDesc%>:</label>
+                <textarea  type="text"  id="<%= dbConfig.colHwrkDesc%>" rows="5" class="form-control col-9" name="<%= dbConfig.colHwrkDesc%>"><%=homeworkData[dbConfig.colHwrkDesc]%></textarea>
+              </div>
+
+              <!--FilePath-->
+              <div class="row ">
+               <label for="old_<%=dbConfig.colFilePath%>" class="col-form-label col-3">Old <%= dbConfig.descFilePath%>:</label>
+                <a href="/<%=homeworkData[dbConfig.colFilePath]%>" id="old_<%= dbConfig.colFilePath%>" download="hw_<%=homeworkData[dbConfig.colFilePath]%>" class="cust-text-color-light col-6"><%=homeworkData[dbConfig.colFilePath]%></a>
+              </div>
+
+              <div class="row form-row form-group ">
+                <label for="<%= dbConfig.colFilePath%>" class="col-form-label col-3"><%= dbConfig.descFilePath%>:</label>
+                <input  type="file" class="col-6" id="<%= dbConfig.colFilePath%>" name="<%= dbConfig.colFilePath%>"/>
+              </div>
+
+              <input type="submit" class="btn btn-sm btn-warning" value="Submit Homework">
+            </form>
+
+          </div>
+        </div>
+    </div>
+
+    
+    <%- include('footerIncludes'); -%>
+  </body>
+</html>
+
