@@ -1,7 +1,9 @@
 import express from 'express';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
-import multer from 'multer';
+// import multer from 'multer';
+import aws from 'aws-sdk';
+import multerS3 from 'multer-s3';
 
 import { authenticateRequestUsingCookies } from './httpGeneralRequestHandler.js';
 
@@ -35,13 +37,32 @@ import dbConfig from './constants.js';
 // const PORT = process.argv[2];
 const PORT = process.env.PORT || 3004;
 
+const s3 = new aws.S3({
+  accessKeyId: process.env.ACCESSKEYID,
+  secretAccessKey: process.env.SECRETACCESSKEY,
+});
+
 const app = express();
 
 // a library cookie-parser to parse the cookie string value in the header into a JavaScript Object.
 app.use(cookieParser());
 
 // Set the name of the upload directory
-const multerUpload = multer({ dest: 'uploads/' });
+// const multerUpload = multer({ dest: 'uploads/' });
+// Configuring multer upload for heroku
+const multerUpload = multer({
+  storage: multerS3({
+    s3,
+    bucket: 'awsbucket-vs-1',
+    acl: 'public-read',
+    metadata: (request, file, callback) => {
+      callback(null, { fieldName: file.fieldname });
+    },
+    key: (request, file, callback) => {
+      callback(null, Date.now().toString());
+    },
+  }),
+});
 
 // Set the view engine to generate HTML responses through ejs files in view directory
 app.set('view engine', 'ejs');
