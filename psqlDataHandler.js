@@ -7,18 +7,31 @@ const { Pool } = pg;
 // create separate DB connection configs for production vs non-production environments.
 // ensure our server still works on our local machines.
 let pgConnectionConfigs;
-if (process.env.ENV === 'PRODUCTION') {
-  // determine how we connect to the remote Postgres server
+// if (process.env.ENV === 'PRODUCTION') {
+//   // determine how we connect to the remote Postgres server
+//   pgConnectionConfigs = {
+//     user: 'postgres',
+//     // set DB_PASSWORD as an environment variable for security.
+//     password: process.env.DB_PASSWORD,
+//     host: 'localhost',
+//     database: dbConfig.dbName,
+//     port: 5432,
+//   };
+// } else {
+//   // determine how we connect to the local Postgres server
+//   pgConnectionConfigs = {
+//     user: 'veenas',
+//     host: 'localhost',
+//     database: dbConfig.dbName,
+//     port: 5432,
+//   };
+// }
+
+if (process.env.DATABASE_URL) {
   pgConnectionConfigs = {
-    user: 'postgres',
-    // set DB_PASSWORD as an environment variable for security.
-    password: process.env.DB_PASSWORD,
-    host: 'localhost',
-    database: dbConfig.dbName,
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
   };
 } else {
-  // determine how we connect to the local Postgres server
   pgConnectionConfigs = {
     user: 'veenas',
     host: 'localhost',
