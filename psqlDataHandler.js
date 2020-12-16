@@ -655,15 +655,17 @@ export const getHomeworkByID = (homeworkID, cbSuccess, cbFailure) => {
 const insertDataIntoHomeWorkTable = (requestUserInfo, newHomeWorkInfo, newFileData, subjectID,
   cbSuccess, cbFailure) => {
   let insertHomeworkQuery = `INSERT INTO ${dbConfig.tableHomeworks} (${dbConfig.colSubID}, ${dbConfig.colTeacherID}, ${dbConfig.colTitle}, ${dbConfig.colHwrkDesc}, ${dbConfig.colCurrentStatus}`;
-  if (newFileData !== undefined && newFileData[dbConfig.fileName] !== '')
+  if (newFileData !== undefined /* && newFileData[dbConfig.fileName] !== '' */)
   {
     insertHomeworkQuery += `, ${dbConfig.colFilePath}`;
   }
   insertHomeworkQuery += ` ) VALUES (${subjectID}, ${requestUserInfo[dbConfig.colID]}, '${newHomeWorkInfo[dbConfig.colTitle]}', '${newHomeWorkInfo[dbConfig.colHwrkDesc]}', '${dbConfig.statusActive}'`;
 
-  if (newFileData !== undefined && newFileData[dbConfig.fileName] !== '')
+  if (newFileData !== undefined /* && newFileData[dbConfig.fileName] !== '' */)
   {
-    insertHomeworkQuery += `, '${newFileData[dbConfig.fileName]}'`;
+    // insertHomeworkQuery += `, '${newFileData[dbConfig.fileName]}'`;
+    // Modified for Multer + S3
+    insertHomeworkQuery += `, '${newFileData[dbConfig.fileLocation]}'`;
   }
 
   insertHomeworkQuery += ') RETURNING *';
@@ -715,9 +717,10 @@ const updateDataIntoHomeWorkTable = (hwID, requestUserInfo, updatedHomeWorkInfo,
   let updateHomeworkQuery = `UPDATE ${dbConfig.tableHomeworks} SET 
   ${dbConfig.colSubID} = ${subjectID}, ${dbConfig.colTeacherID} = ${requestUserInfo[dbConfig.colID]}, ${dbConfig.colTitle} = '${updatedHomeWorkInfo[dbConfig.colTitle]}', ${dbConfig.colHwrkDesc} = '${updatedHomeWorkInfo[dbConfig.colHwrkDesc]}', ${dbConfig.colCurrentStatus} = '${updatedHomeWorkInfo[dbConfig.colCurrentStatus]}', ${dbConfig.colEditedAt} = CURRENT_TIMESTAMP`;
 
-  if (updatedFileData !== undefined && updatedFileData[dbConfig.fileName] !== '')
+  if (updatedFileData !== undefined /* && updatedFileData[dbConfig.fileName] !== '' */)
   {
-    updateHomeworkQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileName]}'`;
+    // updateHomeworkQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileName]}'`;
+    updateHomeworkQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileLocation]}'`;
   }
   updateHomeworkQuery += ` WHERE ${dbConfig.colID} = ${hwID} RETURNING *`;
 
@@ -817,14 +820,15 @@ export const submitNewAnswer = (idHomework, requestUserInfo, newAnswerInfo, newF
   console.log(newFileData !== undefined);
 
   let insertQuery = `INSERT INTO ${dbConfig.tableSubmissions} (${dbConfig.colHwrkID}, ${dbConfig.colStudentID}, ${dbConfig.colDesc}`;
-  if (newFileData !== undefined && newFileData[dbConfig.fileName] !== '')
+  if (newFileData !== undefined /* && newFileData[dbConfig.fileName] !== '' */)
   {
     insertQuery += `, ${dbConfig.colFilePath}`;
   }
   insertQuery += `) VALUES (${idHomework}, ${requestUserInfo[dbConfig.colID]}, '${newAnswerInfo[dbConfig.colDesc]}'`;
-  if (newFileData !== undefined && newFileData[dbConfig.fileName] !== '')
+  if (newFileData !== undefined /* && newFileData[dbConfig.fileName] !== '' */)
   {
-    insertQuery += `, '${newFileData[dbConfig.fileName]}'`;
+    // insertQuery += `, '${newFileData[dbConfig.fileName]}'`;
+    insertQuery += `, '${newFileData[dbConfig.fileLocation]}'`;
   }
   insertQuery += ') RETURNING *';
 
@@ -934,9 +938,10 @@ export const deleteAnswerByIDs = (homeworkID, answerID, cbSuccess, cbFailure) =>
 export const editAnswerByIDs = (homeworkID, answerID, updatedData,
   updatedFileData, userInfo, cbSuccess, cbFailure) => {
   let updateQuery = `UPDATE ${dbConfig.tableSubmissions} SET ${dbConfig.colDesc} = '${updatedData[dbConfig.colDesc]}', ${dbConfig.colUpdatedAt} = CURRENT_TIMESTAMP`;
-  if (updatedFileData !== undefined && updatedFileData[dbConfig.fileName] !== '')
+  if (updatedFileData !== undefined /* && updatedFileData[dbConfig.fileName] !== '' */)
   {
-    updateQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileName]}'`;
+    // updateQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileName]}'`;
+    updateQuery += `, ${dbConfig.colFilePath} = '${updatedFileData[dbConfig.fileLocation]}'`;
   }
   updateQuery += ` WHERE  ${dbConfig.colHwrkID} = ${homeworkID} AND ${dbConfig.colID} = ${answerID} AND ${dbConfig.colStudentID} = ${userInfo[dbConfig.colID]} RETURNING *`;
 

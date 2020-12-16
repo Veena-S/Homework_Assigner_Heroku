@@ -111,6 +111,7 @@ const dbConfig = {
   statusClosed: 'Closed',
 
   fileName: 'filename',
+  fileLocation: 'location';
 
 };
 
