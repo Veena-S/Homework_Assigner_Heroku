@@ -1,7 +1,7 @@
 import express from 'express';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
-// import multer from 'multer';
+import multer from 'multer';
 import aws from 'aws-sdk';
 import multerS3 from 'multer-s3';
 
