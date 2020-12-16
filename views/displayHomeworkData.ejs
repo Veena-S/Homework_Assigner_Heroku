@@ -16,7 +16,8 @@
   <li class="list-group-item cust-bg-color-light border-0 py-1"><i><b><%=dbConfig.descHwrkDesc%>: </b></i><%=homeworkData[dbConfig.colHwrkDesc]%></li>
 
   <li class="list-group-item cust-bg-color-light border-0 py-1"><i><b><%=dbConfig.descFilePath%>: </b></i>
-    <a href="/<%=homeworkData[dbConfig.colFilePath]%>" class="text-dark"><i><%=homeworkData[dbConfig.colFilePath]%></i></a>
+    <!-- <a href="/<%#=homeworkData[dbConfig.colFilePath]%>" class="text-dark" ><i><%#=homeworkData[dbConfig.colFilePath]%></i></a> -->
+     <a href="<%=homeworkData[dbConfig.colFilePath]%>" class="text-dark" ><i><%=homeworkData[dbConfig.colFilePath]%></i></a>
   </li>
 
   <!--
